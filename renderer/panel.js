@@ -102,7 +102,8 @@ function render(animate) {
     `;
     list.appendChild(el);
 
-    el.addEventListener('click', () => {
+    el.addEventListener('click', (e) => {
+      if (e.target.closest('.clip-tools')) return;
       window.clipAPI.copyClip(c.id);
       el.classList.remove('flash');
       void el.offsetWidth;

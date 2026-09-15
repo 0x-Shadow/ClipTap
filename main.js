@@ -189,6 +189,9 @@ async function pollClipboard() {
 
 function addClip({ kind, text, png, sig }) {
   const now = Date.now();
+  // clipboard unchanged since last poll — ignore (prevents re-adding
+  // deleted items and spamming sendClips every 400ms)
+  if (sig === lastSig) return;
   // ignore our own programmatic writes for a grace period
   if (sig === ownWriteSig && now - ownWriteAt < OWN_WRITE_GRACE_MS) return;
   // same content re-copied → bump to top, don't duplicate
@@ -435,7 +438,8 @@ function clearHistory() {
     if (!c.pinned) deleteImageFile(c);
   }
   clips = clips.filter(c => c.pinned);
-  lastSig = null;
+  // NOTE: keep lastSig as-is so the current system-clipboard content
+  // is not immediately re-added on the next poll.
   persistClips();
   sendClips();
 }
