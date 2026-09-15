@@ -61,3 +61,5 @@ main { max-width: 1020px; margin: 0 auto; padding: 0 24px 40px; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+.btn.ghost{background:rgba(255,255,255,0.06);}
+.hero-copy{min-width:0;}
