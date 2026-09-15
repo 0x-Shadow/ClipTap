@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data:; style-src 'self' data:; script-src 'self'">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="panel-body">
+  <div id="panel">
+    <div class="panel-head">
+      <div class="panel-title">
+        <span>Clipboard</span>
+        <span id="clip-count">0</span>
+      </div>
+      <button id="panel-close" title="Close (Esc)">&times;</button>
+    </div>
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+      <input id="search" type="text" placeholder="Search clips…" autocomplete="off" spellcheck="false">
+      <button id="search-clear" class="hidden" title="Clear">&times;</button>
+    </div>
+    <div id="clip-list">
+      <div id="clip-empty">
+        <svg viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="8" y="2" width="8" height="4" rx="1"/>
+          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+          <line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/>
+        </svg>
+        <p>Nothing copied yet</p>
+        <span>Copy anything — it lands here</span>
+      </div>
+    </div>
+    <div class="panel-foot">
+      <span id="foot-hint">Click a clip to copy it back</span>
+      <button id="clear-btn" title="Delete all unpinned">Clear</button>
+    </div>
+  </div>
+  <script src="panel.js"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+{
+  "name": "cliptap",
+  "version": "1.0.0",
+  "description": "Lightweight floating clipboard manager for Windows. Every copy lands in a searchable history with pins and images. Alt+C to open, click to paste back.",
+  "main": "main.js",
+  "author": "0x-Shadow",
+  "license": "MIT",
+  "homepage": "https://github.com/0x-Shadow/ClipTap",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/0x-Shadow/ClipTap.git"
+  },
+  "bugs": {
+    "url": "https://github.com/0x-Shadow/ClipTap/issues"
+  },
+  "keywords": [
+    "clipboard",
+    "clipboard-manager",
+    "clipboard-history",
+    "electron",
+    "windows",
+    "productivity"
+  ],
+  "files": [
+    "main.js",
+    "preload.js",
+    "renderer/**/*",
+    "assets/**/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win",
+    "build:portable": "electron-builder --win portable",
+    "build:nsis": "electron-builder --win nsis"
+  },
+  "build": {
+    "appId": "com.cliptap.app",
+    "productName": "ClipTap",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer/**/*",
+      "assets/**/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "assets/icon.ico",
+      "signAndEditExecutable": false
+    },
+    "forceCodeSigning": false,
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "ClipTap",
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/icon.ico"
+    },
+    "portable": {
+      "artifactName": "ClipTap-${version}-portable.exe"
+    }
+  },
+  "devDependencies": {
+    "electron": "^44.3.0",
+    "electron-builder": "^26.15.3"
+  }
+}
