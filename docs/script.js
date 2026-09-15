@@ -1,25 +1,15 @@
 'use strict';
 /* ClipTap site FX — vanilla, zero dependencies.
- * Loader, scroll progress, lerped custom cursor (dot + ring) with magnetic
- * hover, cursor spotlight, refined click bubbles, CTA ink ripples,
- * count-up stats, scroll reveals, spotlight cards, live demo + toast,
- * copy buttons, accordion polish, nav state, back-to-top.
- * Everything visual is gated behind fine-pointer / no-reduced-motion checks.
+ * Scroll progress, minimal difference-blend cursor (dot + ring),
+ * subtle click rings, CTA ink ripples, scroll reveals, magnetic
+ * buttons, demo tilt, live demo copy + toast, copy buttons, nav, toTop.
+ * Gated behind fine-pointer / no-reduced-motion checks throughout.
  */
 (function () {
   document.documentElement.classList.add('js');
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   function lerp(a, b, t) { return a + (b - a) * t; }
-
-  /* ---------- loader (skip entirely on reduced motion) ---------- */
-  var loader = document.getElementById('loader');
-  function hideLoader() { if (loader) loader.classList.add('done'); }
-  if (reduceMotion) hideLoader();
-  else {
-    window.addEventListener('load', function () { setTimeout(hideLoader, 500); });
-    setTimeout(hideLoader, 2200);
-  }
 
   /* ---------- toast ---------- */
   var toast = document.getElementById('toast');
@@ -32,7 +22,7 @@
     toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 1800);
   }
 
-  /* ---------- scroll progress + nav state + back-to-top ---------- */
+  /* ---------- progress + nav + toTop ---------- */
   var progress = document.querySelector('#progress i');
   var nav = document.getElementById('nav');
   var toTop = document.getElementById('toTop');
@@ -47,38 +37,52 @@
   onScroll();
   if (toTop) toTop.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' }); });
 
-  /* ---------- count-up stats ---------- */
-  function countUp(el) {
-    var target = parseInt(el.getAttribute('data-count'), 10) || 0;
-    var suffix = el.getAttribute('data-suffix') || '';
-    if (reduceMotion || !('IntersectionObserver' in window)) { el.textContent = target + suffix; return; }
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (!en.isIntersecting) return;
-        io.disconnect();
-        var t0 = null;
-        function tick(t) {
-          if (!t0) t0 = t;
-          var k = Math.min((t - t0) / 1100, 1);
-          el.textContent = Math.round(target * (1 - Math.pow(1 - k, 3))) + suffix;
-          if (k < 1) requestAnimationFrame(tick);
+  /* ---------- headline word masks (split once, CSS animates) ---------- */
+  if (!reduceMotion) {
+    Array.prototype.forEach.call(document.querySelectorAll('.display'), function (h) {
+      var nodes = Array.prototype.slice.call(h.childNodes);
+      h.textContent = '';
+      var wi = 0;
+      nodes.forEach(function (n) {
+        if (n.nodeType === 3) {
+          n.textContent.split(/(\s+)/).forEach(function (part) {
+            if (!part) return;
+            if (/^\s+$/.test(part)) { h.appendChild(document.createTextNode(' ')); return; }
+            var m = document.createElement('span');
+            m.className = 'wordmask';
+            var inner = document.createElement('span');
+            inner.textContent = part;
+            inner.style.animationDelay = (wi * 0.06).toFixed(2) + 's';
+            m.appendChild(inner);
+            h.appendChild(m);
+            wi++;
+          });
+        } else if (n.nodeName === 'BR') {
+          h.appendChild(n);
+        } else {
+          var m2 = document.createElement('span');
+          m2.className = 'wordmask';
+          var in2 = document.createElement('span');
+          in2.style.animationDelay = (wi * 0.06).toFixed(2) + 's';
+          in2.appendChild(n);
+          m2.appendChild(in2);
+          h.appendChild(m2);
+          h.appendChild(document.createTextNode(' '));
+          wi++;
         }
-        requestAnimationFrame(tick);
       });
-    }, { threshold: 0.4 });
-    io.observe(el);
+    });
   }
-  Array.prototype.forEach.call(document.querySelectorAll('[data-count]'), countUp);
 
   /* ---------- scroll reveals ---------- */
   if (!reduceMotion && 'IntersectionObserver' in window) {
     var els = Array.prototype.slice.call(document.querySelectorAll(
-      '.section .kicker, .section h2, .section .sub, .bento .cell, .steps li, .dl-card, .term, .keys, .accordion details, .cta-band, .hero-demo'
+      '.mono-label, .section h2, .lede, .hero-cta, .meta, .hero-demo, .feat, .steps li, .dl-row, .term, .keys, .accordion details'
     ));
     els.forEach(function (el) { el.classList.add('reveal'); });
-    Array.prototype.forEach.call(document.querySelectorAll('.bento, .steps'), function (group) {
+    Array.prototype.forEach.call(document.querySelectorAll('.feat-list, .steps'), function (group) {
       Array.prototype.forEach.call(group.children, function (child, i) {
-        child.style.transitionDelay = Math.min(i * 70, 350) + 'ms';
+        child.style.transitionDelay = Math.min(i * 60, 300) + 'ms';
       });
     });
     var rio = new IntersectionObserver(function (entries) {
@@ -89,18 +93,7 @@
     els.forEach(function (el) { rio.observe(el); });
   }
 
-  /* ---------- spotlight cards (mouse-tracked radial highlight) ---------- */
-  if (finePointer && !reduceMotion) {
-    Array.prototype.forEach.call(document.querySelectorAll('.spot'), function (card) {
-      card.addEventListener('pointermove', function (e) {
-        var r = card.getBoundingClientRect();
-        card.style.setProperty('--sx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
-        card.style.setProperty('--sy', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
-      });
-    });
-  }
-
-  /* ---------- material ink ripple on CTAs ---------- */
+  /* ---------- CTA ink ripple ---------- */
   if (!reduceMotion) {
     Array.prototype.forEach.call(document.querySelectorAll('[data-ripple]'), function (el) {
       el.addEventListener('pointerdown', function (e) {
@@ -112,19 +105,19 @@
         ink.style.left = (e.clientX - r.left).toFixed(0) + 'px';
         ink.style.top = (e.clientY - r.top).toFixed(0) + 'px';
         el.appendChild(ink);
-        setTimeout(function () { ink.remove(); }, 650);
+        setTimeout(function () { ink.remove(); }, 600);
       });
     });
   }
 
-  /* ---------- magnetic elements ---------- */
+  /* ---------- magnetic + demo tilt ---------- */
   if (finePointer && !reduceMotion) {
     Array.prototype.forEach.call(document.querySelectorAll('[data-magnetic]'), function (el) {
       el.addEventListener('pointermove', function (e) {
         var r = el.getBoundingClientRect();
         var ox = e.clientX - (r.left + r.width / 2);
         var oy = e.clientY - (r.top + r.height / 2);
-        el.style.transform = 'translate(' + (ox * 0.14).toFixed(1) + 'px,' + (oy * 0.2).toFixed(1) + 'px)';
+        el.style.transform = 'translate(' + (ox * 0.1).toFixed(1) + 'px,' + (oy * 0.16).toFixed(1) + 'px)';
       });
       el.addEventListener('pointerleave', function () { el.style.transform = ''; });
     });
@@ -135,19 +128,18 @@
         var r = hero.getBoundingClientRect();
         var px = (e.clientX - r.left) / r.width - 0.5;
         var py = (e.clientY - r.top) / r.height - 0.5;
-        demo.style.transform = 'rotateY(' + (px * 9).toFixed(2) + 'deg) rotateX(' + (-py * 7).toFixed(2) + 'deg)';
+        demo.style.transform = 'rotateY(' + (px * 7).toFixed(2) + 'deg) rotateX(' + (-py * 6).toFixed(2) + 'deg)';
       });
       hero.addEventListener('pointerleave', function () { demo.style.transform = ''; });
     }
   }
 
-  /* ---------- custom cursor: instant dot + lerped ring + spotlight ---------- */
+  /* ---------- minimal difference cursor ---------- */
   var cursor = document.getElementById('cursor');
   var cDot = cursor ? cursor.querySelector('.cur-dot') : null;
   var cRing = cursor ? cursor.querySelector('.cur-ring') : null;
-  var spot = document.getElementById('spot');
   var cursorOn = !!(cursor && cDot && cRing && finePointer && !reduceMotion);
-  var mx = -100, my = -100, rx = -100, ry = -100, sx = -100, sy = -100;
+  var mx = -100, my = -100, rx = -100, ry = -100;
   if (cursorOn) {
     document.documentElement.classList.add('has-cursor');
     document.addEventListener('pointermove', function (e) {
@@ -165,12 +157,11 @@
     });
   }
 
-  /* ---------- refined click bubbles (single ring + small droplets) ---------- */
+  /* ---------- subtle click ring + droplets ---------- */
   var canvas = document.getElementById('fx');
   var ctx = canvas ? canvas.getContext('2d') : null;
   var parts = [];
   var rings = [];
-  var MAX_PARTS = 120;
   function sizeCanvas() {
     if (!canvas || !ctx) return;
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -179,20 +170,19 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
   function burst(x, y) {
-    rings.push({ x: x, y: y, r: 4, max: 64, a: 0.5 });
-    for (var i = 0; i < 8; i++) {
-      if (parts.length >= MAX_PARTS) parts.shift();
+    rings.push({ x: x, y: y, r: 3, max: 46, a: 0.4 });
+    for (var i = 0; i < 6; i++) {
+      if (parts.length > 90) parts.shift();
       var ang = Math.random() * Math.PI * 2;
-      var sp = 0.8 + Math.random() * 2.2;
+      var sp = 0.6 + Math.random() * 1.8;
       parts.push({
         x: x, y: y,
-        vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp - 1.2,
-        r: 1.5 + Math.random() * 3.5,
-        life: 1, decay: 0.012 + Math.random() * 0.014,
-        wob: Math.random() * Math.PI * 2
+        vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp - 1,
+        r: 1 + Math.random() * 2.5,
+        life: 1, decay: 0.014 + Math.random() * 0.014
       });
     }
-    if (rings.length > 12) rings.splice(0, rings.length - 12);
+    if (rings.length > 8) rings.splice(0, rings.length - 8);
   }
   if (ctx && !reduceMotion) {
     sizeCanvas();
@@ -200,44 +190,37 @@
     document.addEventListener('pointerdown', function (e) { burst(e.clientX, e.clientY); }, { passive: true });
   }
 
-  /* ---------- one rAF loop ---------- */
   function frame() {
     if (cursorOn) {
       cDot.style.transform = 'translate(' + mx + 'px,' + my + 'px) translate(-50%,-50%)';
-      rx = lerp(rx, mx, 0.2); ry = lerp(ry, my, 0.2);
+      rx = lerp(rx, mx, 0.22); ry = lerp(ry, my, 0.22);
       cRing.style.transform = 'translate(' + rx.toFixed(1) + 'px,' + ry.toFixed(1) + 'px) translate(-50%,-50%)';
-      if (spot) {
-        sx = lerp(sx, mx, 0.07); sy = lerp(sy, my, 0.07);
-        spot.style.transform = 'translate(' + sx.toFixed(1) + 'px,' + sy.toFixed(1) + 'px)';
-        spot.style.opacity = cursor.classList.contains('on') ? '1' : '0';
-      }
     }
     if (ctx && (rings.length || parts.length)) {
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
       var i, g, j, p;
       for (i = rings.length - 1; i >= 0; i--) {
         g = rings[i];
-        g.r += (g.max - g.r) * 0.16 + 0.5;
-        g.a *= 0.93;
+        g.r += (g.max - g.r) * 0.18 + 0.5;
+        g.a *= 0.92;
         if (g.a < 0.02 || g.r >= g.max) { rings.splice(i, 1); continue; }
         ctx.beginPath();
         ctx.arc(g.x, g.y, g.r, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(41,151,255,' + g.a.toFixed(3) + ')';
-        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = 'rgba(242,240,234,' + g.a.toFixed(3) + ')';
+        ctx.lineWidth = 1;
         ctx.stroke();
       }
       for (j = parts.length - 1; j >= 0; j--) {
         p = parts[j];
-        p.wob += 0.09;
-        p.x += p.vx + Math.sin(p.wob) * 0.35;
+        p.x += p.vx;
         p.y += p.vy;
-        p.vy -= 0.015;
-        p.vx *= 0.986;
+        p.vy -= 0.01;
+        p.vx *= 0.987;
         p.life -= p.decay;
         if (p.life <= 0) { parts.splice(j, 1); continue; }
         ctx.beginPath();
         ctx.arc(p.x, p.y, Math.max(p.r * p.life, 0.4), 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(120,190,255,' + (p.life * 0.75).toFixed(3) + ')';
+        ctx.fillStyle = 'rgba(41,151,255,' + (p.life * 0.7).toFixed(3) + ')';
         ctx.fill();
       }
       if (!rings.length && !parts.length) ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
@@ -246,7 +229,7 @@
   }
   if (cursorOn || (ctx && !reduceMotion)) requestAnimationFrame(frame);
 
-  /* ---------- live demo: click a clip to copy + toast ---------- */
+  /* ---------- live demo copy + build-command copy ---------- */
   Array.prototype.forEach.call(document.querySelectorAll('.demo-clip'), function (clip) {
     clip.addEventListener('click', function () {
       var text = clip.getAttribute('data-text') || '';
@@ -254,20 +237,17 @@
         clip.classList.remove('flash');
         void clip.offsetWidth;
         clip.classList.add('flash');
-        showToast('Copied — paste anywhere');
+        showToast('copied — paste anywhere');
         setTimeout(function () { clip.classList.remove('flash'); }, 1200);
       }
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(done, done);
-      } else done();
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, done);
+      else done();
     });
   });
-
-  /* ---------- copy build command ---------- */
   var copyBuild = document.getElementById('copyBuild');
   if (copyBuild) copyBuild.addEventListener('click', function () {
     var cmd = 'git clone https://github.com/0x-Shadow/ClipTap.git && cd ClipTap && npm install && npm start';
-    function done() { copyBuild.textContent = 'copied'; showToast('Build command copied'); setTimeout(function () { copyBuild.textContent = 'copy'; }, 1500); }
+    function done() { copyBuild.textContent = 'copied'; showToast('build command copied'); setTimeout(function () { copyBuild.textContent = 'copy'; }, 1500); }
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(cmd).then(done, done);
     else done();
   });

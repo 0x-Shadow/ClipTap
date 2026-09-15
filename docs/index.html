@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ClipTap — Every copy, one tap away</title>
+  <title>ClipTap — Your clipboard, with a memory</title>
   <meta name="description" content="ClipTap is a free, open-source floating clipboard manager for Windows. Searchable history, pins, images. Zero telemetry.">
-  <meta name="theme-color" content="#08080c">
-  <meta property="og:title" content="ClipTap — Every copy, one tap away">
+  <meta name="theme-color" content="#0a0a0b">
+  <meta property="og:title" content="ClipTap — Your clipboard, with a memory">
   <meta property="og:description" content="Free, open-source floating clipboard manager for Windows. Zero telemetry.">
   <meta property="og:type" content="website">
   <link rel="stylesheet" href="./styles.css">
@@ -16,16 +16,15 @@
   </script>
 </head>
 <body>
-  <div id="loader" aria-hidden="true"><div class="loader-mark"><img src="../assets/icon.png" alt="" width="44" height="44" onerror="this.remove()"><span>ClipTap</span></div><div class="loader-bar"><i></i></div></div>
   <div id="progress" aria-hidden="true"><i></i></div>
-  <div id="spot" aria-hidden="true"></div>
   <div id="cursor" aria-hidden="true"><div class="cur-ring"></div><div class="cur-dot"></div></div>
   <canvas id="fx" aria-hidden="true"></canvas>
 
   <header class="nav" id="nav">
     <a class="brand" href="#top">
-      <img src="../assets/icon.png" alt="ClipTap logo" width="30" height="30" onerror="this.remove()">
+      <img src="../assets/icon.png" alt="ClipTap logo" width="26" height="26" onerror="this.remove()">
       <span>ClipTap</span>
+      <em>v1.0.1</em>
     </a>
     <nav class="links">
       <a href="#features">Features</a>
@@ -35,114 +34,99 @@
     </nav>
     <div class="nav-cta">
       <a class="btn ghost" href="https://github.com/0x-Shadow/ClipTap">GitHub</a>
-      <a class="btn primary" href="https://github.com/0x-Shadow/ClipTap/releases" data-ripple>Get ClipTap</a>
+      <a class="btn solid" href="https://github.com/0x-Shadow/ClipTap/releases" data-ripple>Download</a>
     </div>
   </header>
 
   <main id="top">
     <section class="hero">
       <div class="hero-inner">
-        <p class="eyebrow"><span class="pulse"></span>Free &amp; open source · MIT · v1.0.1</p>
-        <h1 class="display"><span class="w">Every</span> <span class="w">copy,</span><br><span class="w accent">one tap</span> <span class="w">away.</span></h1>
-        <p class="lede">ClipTap is a floating clipboard manager for Windows. Everything you copy — text and images — lands in a searchable history with pins. Click anything, paste anywhere.</p>
+        <p class="mono-label">Free &amp; open source (MIT) — for Windows</p>
+        <h1 class="display">Your clipboard,<br>with a <em>memory.</em></h1>
+        <p class="lede">ClipTap files away everything you copy — text and images — into a searchable history with pins. One shortcut opens it; one click puts it back.</p>
         <div class="hero-cta">
-          <a class="btn primary big" href="https://github.com/0x-Shadow/ClipTap/releases" data-ripple data-magnetic>Download for Windows</a>
-          <a class="btn ghost big" href="https://github.com/0x-Shadow/ClipTap" data-ripple data-magnetic>Star on GitHub</a>
+          <a class="btn solid big" href="https://github.com/0x-Shadow/ClipTap/releases" data-ripple data-magnetic>Download free</a>
+          <a class="btn ghost big" href="https://github.com/0x-Shadow/ClipTap" data-ripple data-magnetic>Read the source</a>
         </div>
-        <dl class="stats">
-          <div><dt data-count="100" data-suffix="%">0</dt><dd>local — zero telemetry</dd></div>
-          <div><dt data-count="2">0</dt><dd>builds — installer + portable</dd></div>
-          <div><dt data-count="0">0</dt><dd>trackers, accounts, ads</dd></div>
-        </dl>
+        <p class="meta">Installer + portable · No account · No telemetry · <a href="#how"><code>Ctrl+Shift+V</code></a> to open</p>
       </div>
       <div class="hero-demo">
         <div class="demo-panel" id="demoPanel">
-          <div class="demo-head"><span class="demo-title">Clipboard</span><span class="demo-count" id="demoCount">3</span><span class="demo-live"><i></i>live demo — click a clip</span></div>
+          <div class="demo-head"><span class="demo-title">Clipboard</span><span class="demo-count">3</span><span class="demo-live">live demo — click a clip</span></div>
           <div class="demo-search">Search clips… <kbd>/</kbd></div>
           <button class="demo-clip" data-text="Hello world — project notes for Friday"><strong>Hello world — project notes…</strong><span>text · just now</span></button>
           <button class="demo-clip" data-text="Screenshot_2026-09-15.png"><strong>Screenshot thumbnail…</strong><span>image · 2m ago</span></button>
-          <button class="demo-clip pinned" data-text="s3cr3t-wifi-password"><strong>Pinned: wifi password…</strong><span>pinned · forever</span></button>
+          <button class="demo-clip pinned" data-text="s3cr3t-wifi-password"><strong>Pinned: wifi password…</strong><span>pinned · survives restarts</span></button>
         </div>
-        <p class="demo-hint">Try it — clicking copies the text, just like the app.</p>
       </div>
     </section>
 
-    <div class="marquee" aria-hidden="true"><div class="marquee-track">
-      <span>Instant search</span><span>·</span><span>Pins</span><span>·</span><span>Text + images</span><span>·</span><span>Ctrl+Shift+V</span><span>·</span><span>Zero telemetry</span><span>·</span><span>Open source</span><span>·</span>
-      <span>Instant search</span><span>·</span><span>Pins</span><span>·</span><span>Text + images</span><span>·</span><span>Ctrl+Shift+V</span><span>·</span><span>Zero telemetry</span><span>·</span><span>Open source</span><span>·</span>
-    </div></div>
-
     <section id="features" class="section">
-      <p class="kicker">Why ClipTap</p>
-      <h2>Windows clipboard,<br>finally finished.</h2>
-      <p class="sub"><code>Win+V</code> has no search, no organization, and drops rapid copies. ClipTap fixes all of it.</p>
-      <div class="bento">
-        <div class="cell wide spot"><h3>Automatic history</h3><p>Every copy captured, newest on top. Re-copies bump to the top instead of duplicating — rapid back-to-back copies never get lost.</p><div class="mini-stack"><i></i><i></i><i></i></div></div>
-        <div class="cell spot"><h3>Text + images</h3><p>Full support for both, with thumbnails.</p></div>
-        <div class="cell spot"><h3>Instant search</h3><p>A pill search bar filters as you type. Press <code>/</code>.</p></div>
-        <div class="cell spot"><h3>Pins</h3><p>Passwords, snippets, links — kept forever, surviving restarts and Clear.</p></div>
-        <div class="cell spot"><h3>One-click copy-back</h3><p>Click any clip and it flashes green, ready to paste.</p></div>
-        <div class="cell wide spot"><h3>Always at hand</h3><p>A floating button that stays on top, tray controls for pause / launch-at-login / history size, and a global <code>Ctrl+Shift+V</code> shortcut from any app.</p></div>
+      <p class="mono-label">01 — Features</p>
+      <h2>What it does, plainly.</h2>
+      <div class="feat-list">
+        <div class="feat"><span class="idx">01</span><h3>Automatic history</h3><p>Every copy is captured, newest on top. Re-copying bumps an item up instead of duplicating it — rapid back-to-back copies are never dropped, unlike <code>Win+V</code>.</p></div>
+        <div class="feat"><span class="idx">02</span><h3>Text and images</h3><p>Both live in the same list. Image clips show thumbnails; oversized dumps are skipped so the history stays fast.</p></div>
+        <div class="feat"><span class="idx">03</span><h3>Search that keeps up</h3><p>A pill search bar filters as you type. Press <code>/</code> to jump to it, <code>Enter</code> to copy the top match.</p></div>
+        <div class="feat"><span class="idx">04</span><h3>Pins</h3><p>Passwords, snippets, links — pinned items stay on top and survive restarts and Clear.</p></div>
+        <div class="feat"><span class="idx">05</span><h3>One-click copy-back</h3><p>Click any clip and it's on the clipboard, flashing green. Paste anywhere.</p></div>
+        <div class="feat"><span class="idx">06</span><h3>Out of the way</h3><p>A small floating button that stays on top, a tray menu (pause monitoring, launch at login, history size 25–200), and a global shortcut that works from any app.</p></div>
       </div>
     </section>
 
     <section id="how" class="section">
-      <p class="kicker">How it works</p>
-      <h2>Copy. Tap. Paste.</h2>
+      <p class="mono-label">02 — How it works</p>
+      <h2>Copy, tap, paste.</h2>
       <ol class="steps">
-        <li><b>01</b><div><h3>Copy anything</h3><p>ClipTap watches the clipboard and files every copy into history.</p></div></li>
-        <li><b>02</b><div><h3>Tap to open</h3><p>Hit <code>Ctrl+Shift+V</code> or the floating button — search, pin, delete.</p></div></li>
-        <li><b>03</b><div><h3>Click to paste back</h3><p>One click puts it on the clipboard. Paste anywhere.</p></div></li>
+        <li><b>1</b><div><h3>Copy like always</h3><p>Nothing changes about how you work. ClipTap files each copy away in the background.</p></div></li>
+        <li><b>2</b><div><h3>Tap to open</h3><p><code>Ctrl+Shift+V</code> or the floating button. Search, pin, or delete.</p></div></li>
+        <li><b>3</b><div><h3>Click to paste back</h3><p>One click returns it to the clipboard. Then paste wherever you were.</p></div></li>
       </ol>
     </section>
 
     <section id="download" class="section">
-      <p class="kicker">Download</p>
-      <h2>Get ClipTap free.</h2>
-      <p class="sub">Latest release lives on GitHub. Pick your flavor.</p>
-      <div class="dl-grid">
-        <a class="dl-card spot" href="https://github.com/0x-Shadow/ClipTap/releases" data-ripple><h3>Installer</h3><p>Standard Windows setup with Start Menu shortcut.</p><span class="btn primary">Get installer</span></a>
-        <a class="dl-card spot" href="https://github.com/0x-Shadow/ClipTap/releases" data-ripple><h3>Portable</h3><p>No install — just run the <code>.exe</code> anywhere.</p><span class="btn ghost">Get portable</span></a>
-        <div class="term"><div class="term-bar"><i></i><i></i><i></i><span>build from source</span><button class="copy-btn" id="copyBuild" type="button">copy</button></div><code id="buildCmd">git clone https://github.com/0x-Shadow/ClipTap.git &amp;&amp; cd ClipTap &amp;&amp; npm install &amp;&amp; npm start</code></div>
+      <p class="mono-label">03 — Download</p>
+      <h2>Take it.</h2>
+      <div class="dl-list">
+        <a class="dl-row" href="https://github.com/0x-Shadow/ClipTap/releases" data-ripple><div><h3>Installer</h3><p>Standard Windows setup with a Start Menu shortcut.</p></div><span class="dl-go">Get it <i>→</i></span></a>
+        <a class="dl-row" href="https://github.com/0x-Shadow/ClipTap/releases" data-ripple><div><h3>Portable</h3><p>No install. Run the <code>.exe</code> from anywhere.</p></div><span class="dl-go">Get it <i>→</i></span></a>
       </div>
+      <div class="term"><div class="term-bar"><span>build from source</span><button class="copy-btn" id="copyBuild" type="button">copy</button></div><code>git clone https://github.com/0x-Shadow/ClipTap.git &amp;&amp; cd ClipTap &amp;&amp; npm install &amp;&amp; npm start</code></div>
     </section>
 
     <section id="usage" class="section narrow">
-      <p class="kicker">Usage</p>
-      <h2>Muscle memory in minutes.</h2>
+      <p class="mono-label">04 — Usage</p>
+      <h2>The whole manual.</h2>
       <table class="keys">
-        <tr><th>Action</th><th>Keys</th></tr>
-        <tr><td>Open panel</td><td><code>Ctrl+Shift+V</code> or floating button</td></tr>
-        <tr><td>Copy a clip back</td><td>Click it</td></tr>
-        <tr><td>Search</td><td>Type, or <code>/</code></td></tr>
-        <tr><td>Pin / unpin · Delete</td><td>Hover → pin / trash</td></tr>
-        <tr><td>Copy top match</td><td><code>Enter</code> in search</td></tr>
-        <tr><td>Close</td><td><code>Esc</code></td></tr>
+        <tr><th>Want to</th><th>Do this</th></tr>
+        <tr><td>Open history</td><td><code>Ctrl+Shift+V</code>, floating button, or tray icon</td></tr>
+        <tr><td>Paste something back</td><td>Click it</td></tr>
+        <tr><td>Find an old copy</td><td>Type in search, or press <code>/</code></td></tr>
+        <tr><td>Keep something forever</td><td>Hover → pin</td></tr>
+        <tr><td>Remove something</td><td>Hover → trash</td></tr>
+        <tr><td>Close the panel</td><td><code>Esc</code></td></tr>
       </table>
     </section>
 
     <section id="faq" class="section narrow">
-      <p class="kicker">FAQ</p>
-      <h2>Asked, answered.</h2>
+      <p class="mono-label">05 — FAQ</p>
+      <h2>Fair questions.</h2>
       <div class="accordion">
-        <details open><summary>Is it really free and open source?<i></i></summary><p>Yes — MIT licensed. Source, issues, and releases all live on GitHub. Fork it, hack it, ship it.</p></details>
-        <details><summary>Which platforms are supported?<i></i></summary><p>Windows, as installer and portable builds. The app is Electron with pure HTML/CSS/JS renderers.</p></details>
-        <details><summary>Where do my clips live?<i></i></summary><p>On your disk only: <code>%APPDATA%\ClipTap\clips\</code>. Nothing ever leaves your machine.</p></details>
-        <details><summary>Any telemetry or accounts?<i></i></summary><p>None. Zero network requests, zero accounts. Pause monitoring anytime from the tray icon.</p></details>
-        <details><summary>Something broke — how do I report it?<i></i></summary><p>Open <code>%APPDATA%\ClipTap\ClipTap.log</code> (or tray → Open log file) and attach the last lines to a GitHub issue.</p></details>
+        <details open><summary><span>Cost and license</span><i></i></summary><p>Free, MIT licensed. The source, the issue tracker, and the releases are all on GitHub.</p></details>
+        <details><summary><span>Platforms</span><i></i></summary><p>Windows only — installer and portable builds. It's an Electron app with plain HTML/CSS/JS renderers.</p></details>
+        <details><summary><span>Where does my data go</span><i></i></summary><p>Nowhere. Clips live on your disk under <code>%APPDATA%\ClipTap\clips\</code>. The app makes zero network requests; monitoring can be paused from the tray.</p></details>
+        <details><summary><span>Why not just use Win+V</span><i></i></summary><p>No search, no pins, no organization — and it silently drops rapid consecutive copies. That gap is the entire reason ClipTap exists.</p></details>
+        <details><summary><span>It broke. Now what</span><i></i></summary><p>Open <code>%APPDATA%\ClipTap\ClipTap.log</code> (or tray → Open log file) and attach the last lines to a GitHub issue.</p></details>
       </div>
-    </section>
-
-    <section class="cta-band spot">
-      <h2>Stop re-copying.<br>Start ClipTapping.</h2>
-      <a class="btn primary big" href="https://github.com/0x-Shadow/ClipTap/releases" data-ripple data-magnetic>Download free</a>
     </section>
   </main>
 
   <footer class="foot">
-    <a class="brand small" href="#top"><img src="../assets/icon.png" alt="" width="22" height="22" onerror="this.remove()"><span>ClipTap</span></a>
-    <span>MIT License · made for people who copy-paste a lot</span>
-    <nav><a href="https://github.com/0x-Shadow/ClipTap">GitHub</a><a href="https://github.com/0x-Shadow/ClipTap/releases">Releases</a><a href="#top">Back to top ↑</a></nav>
+    <p class="foot-word" aria-hidden="true">ClipTap</p>
+    <div class="foot-row">
+      <span>MIT License · lives on your disk, not in a cloud</span>
+      <nav><a href="https://github.com/0x-Shadow/ClipTap">GitHub</a><a href="https://github.com/0x-Shadow/ClipTap/releases">Releases</a><a href="#top">Top ↑</a></nav>
+    </div>
   </footer>
 
   <button id="toTop" type="button" aria-label="Back to top">↑</button>
