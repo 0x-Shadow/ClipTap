@@ -48,11 +48,15 @@
           <a class="btn solid big" href="https://github.com/0x-Shadow/ClipTap/releases" data-ripple data-magnetic>Download free</a>
           <a class="btn ghost big" href="https://github.com/0x-Shadow/ClipTap" data-ripple data-magnetic>Read the source</a>
         </div>
-        <p class="meta">Installer + portable · No account · No telemetry · <a href="#how"><code>Ctrl+Shift+V</code></a> to open</p>
+        <div class="spec-strip">
+          <div><b>Installer + portable</b>No account, no setup fuss</div>
+          <div><b>Zero telemetry</b>Stays on your disk</div>
+          <div><b><code>Ctrl+Shift+V</code></b>Opens from any app</div>
+        </div>
       </div>
       <div class="hero-demo">
         <div class="demo-panel" id="demoPanel">
-          <div class="demo-head"><span class="demo-title">Clipboard</span><span class="demo-count">3</span><span class="demo-live">live demo — click a clip</span></div>
+          <div class="demo-head"><span class="demo-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="demo-title">Clipboard</span><span class="demo-count">3</span><span class="demo-live">live demo — click a clip</span></div>
           <div class="demo-search">Search clips… <kbd>/</kbd></div>
           <button class="demo-clip" data-text="Hello world — project notes for Friday"><strong>Hello world — project notes…</strong><span>text · just now</span></button>
           <button class="demo-clip" data-text="Screenshot_2026-09-15.png"><strong>Screenshot thumbnail…</strong><span>image · 2m ago</span></button>
@@ -63,7 +67,7 @@
 
     <section id="features" class="section">
       <p class="mono-label">01 — Features</p>
-      <h2>What it does, plainly.</h2>
+      <h2>What it does, <em>plainly.</em></h2>
       <div class="feat-list">
         <div class="feat"><span class="idx">01</span><h3>Automatic history</h3><p>Every copy is captured, newest on top. Re-copying bumps an item up instead of duplicating it — rapid back-to-back copies are never dropped, unlike <code>Win+V</code>.</p></div>
         <div class="feat"><span class="idx">02</span><h3>Text and images</h3><p>Both live in the same list. Image clips show thumbnails; oversized dumps are skipped so the history stays fast.</p></div>
@@ -76,7 +80,7 @@
 
     <section id="how" class="section">
       <p class="mono-label">02 — How it works</p>
-      <h2>Copy, tap, paste.</h2>
+      <h2>Copy, tap, <em>paste.</em></h2>
       <ol class="steps">
         <li><b>1</b><div><h3>Copy like always</h3><p>Nothing changes about how you work. ClipTap files each copy away in the background.</p></div></li>
         <li><b>2</b><div><h3>Tap to open</h3><p><code>Ctrl+Shift+V</code> or the floating button. Search, pin, or delete.</p></div></li>
@@ -86,17 +90,17 @@
 
     <section id="download" class="section">
       <p class="mono-label">03 — Download</p>
-      <h2>Take it.</h2>
+      <h2>Free, <em>forever.</em></h2>
       <div class="dl-list">
-        <a class="dl-row" href="https://github.com/0x-Shadow/ClipTap/releases" data-ripple><div><h3>Installer</h3><p>Standard Windows setup with a Start Menu shortcut.</p></div><span class="dl-go">Get it <i>→</i></span></a>
-        <a class="dl-row" href="https://github.com/0x-Shadow/ClipTap/releases" data-ripple><div><h3>Portable</h3><p>No install. Run the <code>.exe</code> from anywhere.</p></div><span class="dl-go">Get it <i>→</i></span></a>
+        <a class="dl-row" href="https://github.com/0x-Shadow/ClipTap/releases" data-ripple><div><h3>Installer</h3><p>Standard Windows setup with a Start Menu shortcut.</p><span class="dl-meta">NSIS · x64 · via GitHub Releases</span></div><span class="dl-go">Get it <i>→</i></span></a>
+        <a class="dl-row" href="https://github.com/0x-Shadow/ClipTap/releases" data-ripple><div><h3>Portable</h3><p>No install. Run the <code>.exe</code> from anywhere.</p><span class="dl-meta">ZIP · x64 · via GitHub Releases</span></div><span class="dl-go">Get it <i>→</i></span></a>
       </div>
       <div class="term"><div class="term-bar"><span>build from source</span><button class="copy-btn" id="copyBuild" type="button">copy</button></div><code>git clone https://github.com/0x-Shadow/ClipTap.git &amp;&amp; cd ClipTap &amp;&amp; npm install &amp;&amp; npm start</code></div>
     </section>
 
     <section id="usage" class="section narrow">
       <p class="mono-label">04 — Usage</p>
-      <h2>The whole manual.</h2>
+      <h2>The whole <em>manual.</em></h2>
       <table class="keys">
         <tr><th>Want to</th><th>Do this</th></tr>
         <tr><td>Open history</td><td><code>Ctrl+Shift+V</code>, floating button, or tray icon</td></tr>
@@ -110,7 +114,7 @@
 
     <section id="faq" class="section narrow">
       <p class="mono-label">05 — FAQ</p>
-      <h2>Fair questions.</h2>
+      <h2>Fair <em>questions.</em></h2>
       <div class="accordion">
         <details open><summary><span>Cost and license</span><i></i></summary><p>Free, MIT licensed. The source, the issue tracker, and the releases are all on GitHub.</p></details>
         <details><summary><span>Platforms</span><i></i></summary><p>Windows only — installer and portable builds. It's an Electron app with plain HTML/CSS/JS renderers.</p></details>
@@ -127,6 +131,7 @@
       <span>MIT License · lives on your disk, not in a cloud</span>
       <nav><a href="https://github.com/0x-Shadow/ClipTap">GitHub</a><a href="https://github.com/0x-Shadow/ClipTap/releases">Releases</a><a href="#top">Top ↑</a></nav>
     </div>
+    <p class="colophon">Set in system grotesk, Georgia italic &amp; monospace — no webfonts, no trackers, three files.</p>
   </footer>
 
   <button id="toTop" type="button" aria-label="Back to top">↑</button>

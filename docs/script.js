@@ -77,7 +77,7 @@
   /* ---------- scroll reveals ---------- */
   if (!reduceMotion && 'IntersectionObserver' in window) {
     var els = Array.prototype.slice.call(document.querySelectorAll(
-      '.mono-label, .section h2, .lede, .hero-cta, .meta, .hero-demo, .feat, .steps li, .dl-row, .term, .keys, .accordion details'
+      '.mono-label, .section h2, .lede, .hero-cta, .spec-strip, .hero-demo, .feat, .steps li, .dl-row, .term, .keys, .accordion details'
     ));
     els.forEach(function (el) { el.classList.add('reveal'); });
     Array.prototype.forEach.call(document.querySelectorAll('.feat-list, .steps'), function (group) {
@@ -91,6 +91,20 @@
       });
     }, { threshold: 0.12 });
     els.forEach(function (el) { rio.observe(el); });
+  }
+
+  /* ---------- scrollspy ---------- */
+  var spyLinks = Array.prototype.slice.call(document.querySelectorAll('.links a'));
+  if ('IntersectionObserver' in window && spyLinks.length) {
+    var spy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        spyLinks.forEach(function (a) {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + en.target.id);
+        });
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    Array.prototype.forEach.call(document.querySelectorAll('main .section[id]'), function (s) { spy.observe(s); });
   }
 
   /* ---------- CTA ink ripple ---------- */
