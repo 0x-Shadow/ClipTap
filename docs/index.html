@@ -61,3 +61,54 @@
         <div class="card"><h3>Always at hand</h3><p>Floating button, tray controls, and global <code>Ctrl+Shift+V</code> shortcut.</p></div>
       </div>
     </section>
+    <section id="download" class="section">
+      <h2>Download</h2>
+      <p class="sub">Get the latest release from GitHub.</p>
+      <div class="grid two">
+        <div class="card"><h3>Installer</h3><p>Standard Windows installer with Start Menu shortcut.</p><p><a class="btn primary" href="https://github.com/0x-Shadow/ClipTap/releases">Get installer</a></p></div>
+        <div class="card"><h3>Portable</h3><p>No installation needed — just run the .exe.</p><p><a class="btn ghost" href="https://github.com/0x-Shadow/ClipTap/releases">Get portable</a></p></div>
+      </div>
+      <p class="fine">Or build from source: <code>git clone https://github.com/0x-Shadow/ClipTap.git &amp;&amp; cd ClipTap &amp;&amp; npm install &amp;&amp; npm start</code></p>
+    </section>
+
+    <section id="install" class="section">
+      <h2>Install in 3 steps</h2>
+      <ol class="steps">
+        <li><strong>Download</strong> the installer or portable build from Releases.</li>
+        <li><strong>Run it.</strong> ClipTap lives in your tray and shows a floating button.</li>
+        <li><strong>Press <code>Ctrl+Shift+V</code></strong> anywhere to open your history.</li>
+      </ol>
+    </section>
+
+    <section id="usage" class="section">
+      <h2>Usage</h2>
+      <table class="keys">
+        <tr><th>Action</th><th>Method</th></tr>
+        <tr><td>Open panel</td><td>Click the floating button or <code>Ctrl+Shift+V</code></td></tr>
+        <tr><td>Copy a clip back</td><td>Click it (flashes green)</td></tr>
+        <tr><td>Search</td><td>Type in the pill bar, or press <code>/</code></td></tr>
+        <tr><td>Pin / unpin</td><td>Hover a clip, click the pin</td></tr>
+        <tr><td>Delete</td><td>Hover a clip, click the trash</td></tr>
+        <tr><td>Close</td><td><code>Esc</code></td></tr>
+      </table>
+    </section>
+
+    <section id="faq" class="section">
+      <h2>FAQ</h2>
+      <div class="faq">
+        <div class="card"><h3>Is it free and open source?</h3><p>Yes. MIT licensed. Source, issues, and releases live on GitHub.</p></div>
+        <div class="card"><h3>Which platforms?</h3><p>Windows (installer + portable). Built with Electron.</p></div>
+        <div class="card"><h3>Where do clips live?</h3><p>On your disk only: <code>%APPDATA%\ClipTap\clips\</code>. Nothing leaves your machine.</p></div>
+        <div class="card"><h3>Any telemetry?</h3><p>No. Zero network requests. Pause monitoring anytime from the tray.</p></div>
+        <div class="card"><h3>Something wrong?</h3><p>Check <code>%APPDATA%\ClipTap\ClipTap.log</code> or tray → Open log file, then open a GitHub issue.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span>ClipTap · MIT License</span>
+    <a href="https://github.com/0x-Shadow/ClipTap">GitHub</a>
+    <a href="https://github.com/0x-Shadow/ClipTap/releases">Releases</a>
+  </footer>
+</body>
+</html>
