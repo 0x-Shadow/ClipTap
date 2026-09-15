@@ -1,7 +1,38 @@
-const { app, BrowserWindow, globalShortcut, ipcMain, clipboard, screen, nativeImage, Tray, Menu, ClipboardItem } = require('electron');
+const { app, BrowserWindow, globalShortcut, ipcMain, clipboard, screen, nativeImage, Tray, Menu, ClipboardItem, shell } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
+
+// ─── File logger: every console.error also lands in userData/ClipTap.log ───
+function logPath() {
+  try {
+    return path.join(app.getPath('userData'), 'ClipTap.log');
+  } catch {
+    return null;
+  }
+}
+
+function appendLog(line) {
+  try {
+    const p = logPath();
+    if (!p) return;
+    try {
+      if (fs.existsSync(p) && fs.statSync(p).size > 300 * 1024) {
+        const tail = fs.readFileSync(p, 'utf8').slice(-150 * 1024);
+        fs.writeFileSync(p, '...[rotated]...\n' + tail);
+      }
+    } catch { /* rotation best-effort */ }
+    fs.appendFileSync(p, new Date().toISOString() + ' ' + line + '\n');
+  } catch { /* logging must never crash the app */ }
+}
+
+const _origError = console.error.bind(console);
+console.error = (...args) => {
+  try {
+    appendLog(args.map(a => (a && a.stack) || String(a)).join(' '));
+  } catch { /* ignore */ }
+  _origError(...args);
+};
 
 let buttonWindow = null;
 let panelWindow = null;
@@ -112,24 +143,33 @@ function sigOfText(text) {
 }
 
 let pollBusy = false;
+const CLIP_OP_TIMEOUT_MS = 3000; // a wedged clipboard must never stall the watcher
+
+function withTimeout(promise, tag) {
+  let timer = null;
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => reject(new Error(tag + ' timed out')), CLIP_OP_TIMEOUT_MS);
+  });
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
+}
 
 async function pollClipboard() {
   if (pollBusy || !getSettings().monitoring) return;
   pollBusy = true;
   try {
-    const text = await clipboard.readText();
+    const text = await withTimeout(clipboard.readText(), 'readText');
     if (text && text.length > 0) {
       if (Buffer.byteLength(text, 'utf8') > MAX_TEXT_BYTES) { lastSig = 'T-oversize'; return; }
       addClip({ kind: 'text', text, sig: sigOfText(text) });
       return;
     }
     // Electron 40+: images come back as ClipboardItems — read image/* as bytes
-    const items = await clipboard.read();
+    const items = await withTimeout(clipboard.read(), 'clipboard.read');
     const item = (items || []).find(i => i.types && i.types.some(t => t.startsWith('image/')));
     if (!item) return;
     const mime = item.types.find(t => t.startsWith('image/'));
-    const blob = await item.getType(mime);
-    const buf = Buffer.from(await blob.arrayBuffer());
+    const blob = await withTimeout(item.getType(mime), 'getType');
+    const buf = Buffer.from(await withTimeout(blob.arrayBuffer(), 'arrayBuffer'));
     if (buf.length === 0 || buf.length > MAX_IMAGE_BYTES) { lastSig = 'I-oversize'; return; }
     const image = nativeImage.createFromBuffer(buf);
     if (image.isEmpty()) return;
@@ -204,7 +244,7 @@ async function copyClip(id) {
   if (!clip) return false;
   try {
     if (clip.kind === 'text') {
-      await clipboard.writeText(clip.text);
+      await withTimeout(clipboard.writeText(clip.text), 'writeText');
       ownWriteSig = sigOfText(clip.text);
     } else {
       if (!clip.file || !isSafeImageFile(clip.file)) return false;
@@ -213,7 +253,10 @@ async function copyClip(id) {
       const png = fs.readFileSync(filePath);
       const image = nativeImage.createFromBuffer(png);
       if (image.isEmpty()) return false;
-      await clipboard.write([new ClipboardItem({ 'image/png': new Blob([png], { type: 'image/png' }) })]);
+      await withTimeout(
+        clipboard.write([new ClipboardItem({ 'image/png': new Blob([png], { type: 'image/png' }) })]),
+        'clipboard.write'
+      );
       ownWriteSig = 'I' + crypto.createHash('sha1').update(png).digest('hex');
     }
     ownWriteAt = Date.now();
@@ -372,6 +415,16 @@ function buildTrayMenu() {
     { type: 'separator' },
     { label: `Clips: ${clips.length}`, enabled: false },
     { label: 'Clear history', click: clearHistory },
+    {
+      label: 'Open log file', click: () => {
+        try {
+          const p = logPath();
+          if (p && fs.existsSync(p)) shell.openPath(p);
+        } catch (err) {
+          console.error('Open log failed:', err.message);
+        }
+      }
+    },
     { type: 'separator' },
     { label: 'Quit', click: () => app.quit() }
   ]));
@@ -389,6 +442,7 @@ function clearHistory() {
 
 // ─── App ───
 app.whenReady().then(() => {
+  console.error(`ClipTap start v${app.getVersion()} electron=${process.versions.electron} platform=${process.platform}`);
   loadClips();
   const s = getSettings();
   try { app.setLoginItemSettings({ openAtLogin: !!s.launchAtLogin }); } catch {}
@@ -408,12 +462,23 @@ app.whenReady().then(() => {
     }
   });
 
+  // Sync IPC must NEVER throw — an exception here kills the calling renderer
   ipcMain.on('get-clips', (event) => {
-    event.returnValue = publicClips();
+    try {
+      event.returnValue = publicClips();
+    } catch (err) {
+      console.error('get-clips failed:', err.message);
+      try { event.returnValue = []; } catch { /* renderer already gone */ }
+    }
   });
 
   ipcMain.on('get-images-dir', (event) => {
-    event.returnValue = imagesDir();
+    try {
+      event.returnValue = imagesDir();
+    } catch (err) {
+      console.error('get-images-dir failed:', err.message);
+      try { event.returnValue = ''; } catch { /* renderer already gone */ }
+    }
   });
 
   ipcMain.on('copy-clip', (event, id) => {

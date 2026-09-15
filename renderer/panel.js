@@ -39,8 +39,11 @@ function matches(c) {
   return (c.file || '').toLowerCase().includes(query);
 }
 
+let firstVisibleId = null;
+
 function render(animate) {
-  list.querySelectorAll('.clip').forEach(el => el.remove());
+  list.querySelectorAll('.clip, .section-label').forEach(el => el.remove());
+  firstVisibleId = null;
   const items = allClips.filter(matches);
   const pinned = items.filter(c => c.pinned);
   const rest = items.filter(c => !c.pinned);
@@ -58,8 +61,21 @@ function render(animate) {
   }
 
   ordered.slice(0, 120).forEach((c, i) => {
+    if (i === 0 && pinned.length > 0 && !query) {
+      const label = document.createElement('div');
+      label.className = 'section-label';
+      label.textContent = 'Pinned';
+      list.appendChild(label);
+    }
+    if (i === pinned.length && pinned.length > 0 && rest.length > 0 && !query) {
+      const label = document.createElement('div');
+      label.className = 'section-label';
+      label.textContent = 'History';
+      list.appendChild(label);
+    }
     const el = document.createElement('div');
     el.className = 'clip' + (c.pinned ? ' pinned' : '');
+    if (firstVisibleId === null) firstVisibleId = c.id;
     if (animate) el.style.animationDelay = Math.min(i * 28, 400) + 'ms';
     else el.classList.add('no-anim');
 
@@ -129,8 +145,16 @@ searchClear.addEventListener('click', () => {
 closeBtn.addEventListener('click', () => window.clipAPI.closePanel());
 clearBtn.addEventListener('click', () => window.clipAPI.clearHistory());
 
+function copyFirst() {
+  if (firstVisibleId === null) return;
+  window.clipAPI.copyClip(firstVisibleId);
+  footHint.textContent = 'Copied — paste anywhere';
+  setTimeout(() => { footHint.textContent = 'Click a clip to copy it back'; }, 1500);
+}
+
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') window.clipAPI.closePanel();
+  if (e.key === 'Enter' && document.activeElement === searchInput) copyFirst();
   if (e.key === '/' && document.activeElement !== searchInput) {
     e.preventDefault();
     searchInput.focus();

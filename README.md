@@ -48,6 +48,7 @@ npm run build  # build installer + portable
 | Search | Type in the pill bar, or press `/` |
 | Pin / unpin | Hover a clip, click the pin |
 | Delete | Hover a clip, click the trash |
+| Copy top match | `Enter` (with search focused) |
 | Close | `Esc`, `×`, or toggle shortcut |
 
 ## Keyboard Shortcuts
@@ -77,6 +78,17 @@ npm run build  # build installer + portable
 - Sandboxed renderers, isolated context, strict CSP, validated IPC — see [SECURITY.md](SECURITY.md)
 - Everything stays on your disk. Zero network requests, zero telemetry
 - The clipboard is the app's purpose and is disclosed here; monitoring can be paused anytime from the tray
+
+## Troubleshooting
+
+Something wrong? The app keeps a log at:
+
+```
+%APPDATA%\ClipTap\ClipTap.log
+```
+
+Or right-click the tray icon → **Open log file**. Attach the last lines when
+reporting an issue.
 
 ## License
 

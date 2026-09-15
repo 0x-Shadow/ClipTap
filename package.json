@@ -1,6 +1,6 @@
 {
   "name": "cliptap",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Lightweight floating clipboard manager for Windows. Every copy lands in a searchable history with pins and images. Alt+C to open, click to paste back.",
   "main": "main.js",
   "author": "0x-Shadow",

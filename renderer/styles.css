@@ -162,6 +162,16 @@ body {
 #clip-list::-webkit-scrollbar { width: 5px; }
 #clip-list::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.14); border-radius: 3px; }
 
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--faint);
+  padding: 10px 6px 7px;
+}
+.section-label:first-child { padding-top: 2px; }
+
 .clip {
   position: relative;
   background: rgba(255, 255, 255, 0.035);
@@ -203,7 +213,14 @@ body {
   align-items: center;
   justify-content: center;
 }
-.clip-img img { width: 100%; height: 100%; max-height: 150px; object-fit: cover; }
+.clip-img img {
+  width: 100%;
+  height: 100%;
+  max-height: 150px;
+  object-fit: cover;
+  transition: transform 0.25s var(--ease);
+}
+.clip:hover .clip-img img { transform: scale(1.02); }
 .img-missing { font-size: 12px; color: var(--faint); padding: 18px; }
 
 .clip-meta {
