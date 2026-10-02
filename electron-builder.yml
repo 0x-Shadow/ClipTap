@@ -1,0 +1,25 @@
+appId: com.cliptap.app
+productName: ClipTap
+directories:
+  output: release
+  buildResources: build
+files:
+  - dist/**/*
+  - package.json
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+  certificateFile: ${env.CERT_FILE}
+  certificatePassword: ${env.CERT_PASSWORD}
+  certificateSubjectName: ${env.CERT_SUBJECT}
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  shortcutName: ClipTap
+
+publish:
+  provider: github
+  owner: 0x-Shadow
+  repo: ClipTap

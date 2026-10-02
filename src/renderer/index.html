@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: file:">
+  <title>ClipTap</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>ClipTap</h1>
+      <div class="controls">
+        <button id="clear-btn">Clear All</button>
+        <button id="wipe-btn">Wipe Data</button>
+      </div>
+    </header>
+    <div id="settings">
+      <label>
+        Image retention (days):
+        <input type="number" id="retention-days" min="1" value="30">
+      </label>
+      <button id="save-settings">Save Settings</button>
+    </div>
+    <div id="conflict-warning" class="hidden"></div>
+    <ul id="clips-list"></ul>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

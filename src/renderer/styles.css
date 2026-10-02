@@ -1,0 +1,14 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: system-ui, sans-serif; background: #1a1a2e; color: #eee; }
+#app { max-width: 800px; margin: 0 auto; padding: 20px; }
+header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+h1 { color: #e94560; }
+button { background: #e94560; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; }
+button:hover { background: #c73454; }
+#settings { margin-bottom: 20px; display: flex; gap: 10px; align-items: center; }
+#conflict-warning { background: #ff6b6b; color: white; padding: 10px; border-radius: 4px; margin-bottom: 10px; }
+.hidden { display: none; }
+#clips-list { list-style: none; }
+.clip-item { background: #16213e; padding: 12px; margin-bottom: 8px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.clip-item img { max-width: 200px; max-height: 150px; border-radius: 4px; }
+.clip-item p { flex: 1; word-break: break-word; white-space: pre-wrap; }
